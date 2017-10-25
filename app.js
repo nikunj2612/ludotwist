@@ -8,10 +8,10 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var http = require('http');
-
+var cool = require('cool-ascii-faces');
 var app = express();
 var server = http.createServer(app);
-server.listen(8008);
+server.listen(process.env.PORT || 5000);
 var io = require('socket.io').listen(server);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
