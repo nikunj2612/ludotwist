@@ -11,12 +11,12 @@ var http = require('http');
 
 var app = express();
 var server = http.createServer(app);
-server.listen(8000);
+server.listen(8008);
 var io = require('socket.io').listen(server);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.set('port',process.env.PORT || 3000);
+app.set('port',2612);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -49,6 +49,6 @@ app.use(function(err, req, res, next) {
 
 app.listen(app.get('port'),function(){
     console.log("Application Express server run on : ", app.get('port'));
-    console.log("Application socket server run on : ", 8000);
+    console.log("Application socket server run on : ", 8008);
 });
 module.exports = app;
