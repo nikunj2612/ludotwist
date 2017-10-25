@@ -7,12 +7,16 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+
 var http = require('http');
 var cool = require('cool-ascii-faces');
 var app = express();
 var server = http.createServer(app);
 server.listen(process.env.PORT || 5000);
 var io = require('socket.io').listen(server);
+var sockConfig = require('./sockets/sockConfig');
+sockConfig.start(io);
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -51,4 +55,13 @@ app.listen(app.get('port'),function(){
     console.log("Application Express server run on : ", app.get('port'));
     console.log("Application socket server run on : ", 8008);
 });
+
+// io.on('connection', (socket) => {
+//   console.log("socket is connected");
+//   socket.on('chat message', function(msg){
+//       console.log('message: ' + msg);
+//   });
+// });
+
 module.exports = app;
+module.exports.io = io;
