@@ -6,6 +6,9 @@ module.exports = {
         io.on('connection', function(socket) {
             socket.on('message', function(message) {
                 console.log('from console  :',message);
+                io.emit('message',{
+                    message : message
+                });
             });
         });
     }
