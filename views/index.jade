@@ -1,31 +1,59 @@
 html
   head
     title Socket.IO chat
+    link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", rel="stylesheet", integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u", crossorigin="anonymous")
     style.
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #userNameDiv{
+        margin: 2% auto;
+        width:40%;
+        height:40%;
+        border : 1px solid lightgray ;
+      }
+      #chatMessage { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      #chatMessage input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+      #chatMessage button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
+    
   body
-    ul#messages
-    form(action='')
-      input#m(autocomplete='off')
-      button Send
+    .container
+      .row
+        #userNameDiv
+          form#userName
+            .form-group
+              .col-xs-12
+                label(for='mn') Enter Your Nick Name
+                input.form-control#mn(autocomplete='off' placeholder = 'Enter Your Name' required)
+            .form-group
+              .col-xs-12.col-xs-offset-4(style='margin-top:5px;')
+                button.btn.btn-default(type='submit') Send
+
+    #chatBoxDiv(style='display:none')
+      ul#messages
+      form#chatMessage(action='')
+        input#m(autocomplete='off' required)
+        button Send
   script(src='/socket.io/socket.io.js')
   script(src='https://code.jquery.com/jquery-1.11.1.js')
+  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js", integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa", crossorigin="anonymous")
   script.
     $(function () {
     var socket = io();
     socket.on('message', function(message) {
     console.log('from console  :',message);
-    $('#messages').append('<br>'+message.message);
+    $('#messages').append('<br>'+message.name + '-' +message.message);
     });
-    $('form').submit(function(){
-    socket.emit('message', {message : $('#m').val()});
+    $('#userName').submit(function(e){
+    e.preventDefault();
+    localStorage.setItem('name',$('#mn').val());
+    $('#userNameDiv').hide();
+    $('#chatBoxDiv').show();
+    });
+    $('#chatMessage').submit(function(){
+    socket.emit('message', {name : localStorage.getItem('name'), message : $('#m').val()});
     $('#m').val('');
     return false;
     });
